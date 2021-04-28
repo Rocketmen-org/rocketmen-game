@@ -49,7 +49,7 @@ void GameEngine::HandleEvents(){
       case SDLK_LEFT :  //move left
       //state_choice = "RUNLEFT";
       std::cout << "left" << std::endl;
-      if((Move_Rect->get_x_pos() - TILE_WIDTH) >= 0){ 
+      if((Move_Rect->get_x_pos() - TILE_WIDTH) >= camera.x){ 
 	Move_Rect->set_x_pos(Move_Rect->get_x_pos() - TILE_WIDTH);
       }
       //player->set_state(state_choice);
@@ -57,7 +57,7 @@ void GameEngine::HandleEvents(){
     case SDLK_RIGHT :  //move right
       //state_choice = "RUNRIGHT";
       std::cout << "right" << std::endl;
-      if((Move_Rect->get_x_pos() + (TILE_WIDTH*2)) <= LEVEL_WIDTH){ 
+      if((Move_Rect->get_x_pos() + (TILE_WIDTH*2)) <= (camera.x + camera.w)){ 
 	Move_Rect->set_x_pos(Move_Rect->get_x_pos() + TILE_WIDTH);
       }
       //player->set_state(state_choice);
@@ -65,7 +65,7 @@ void GameEngine::HandleEvents(){
     case SDLK_UP :    //move up
       //state_choice = "RUNUP";
       std::cout << "up" << std::endl;
-      if((Move_Rect->get_y_pos() - TILE_HEIGHT) >= 0){ 
+      if((Move_Rect->get_y_pos() - TILE_HEIGHT) >= camera.y){ 
 	Move_Rect->set_y_pos(Move_Rect->get_y_pos() - TILE_HEIGHT);
       }
       //player->set_state(state_choice);
@@ -73,7 +73,7 @@ void GameEngine::HandleEvents(){
     case SDLK_DOWN:   //move down
       //state_choice = "RUNDOWN";
       std::cout << "down" << std::endl;
-      if((Move_Rect->get_y_pos() + (TILE_HEIGHT*2)) <= LEVEL_HEIGHT){ 
+      if((Move_Rect->get_y_pos() + (TILE_HEIGHT*2)) <= (camera.y + camera.h)){ 
 	Move_Rect->set_y_pos(Move_Rect->get_y_pos() + TILE_HEIGHT);
       }
       //player->set_state(state_choice);
