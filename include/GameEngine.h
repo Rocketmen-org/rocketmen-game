@@ -70,6 +70,7 @@ protected:
   SDL_Renderer* game_renderer = NULL;
   SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
+  bool game_titlescreen = true;
   bool game_paused = false;
   bool is_running = true;
 };
