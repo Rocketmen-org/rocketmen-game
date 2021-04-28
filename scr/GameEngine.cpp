@@ -21,6 +21,9 @@ void GameEngine::Init(){
   player->Obj_Init("./images/char1.png", 1, 60, 50, (SCREEN_HEIGHT - 300), 3000, 3000, 100, 100);
   player->set_state("IDLE");
 
+  Title_Screen = new GameObject(game_renderer); //creating title screen image
+  Title_Screen->Obj_Init("./images/titlescreen.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT);
+
   Pause_Screen = new GameObject(game_renderer); //creating pause screen image
   Pause_Screen->Obj_Init("./images/paused.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -39,7 +42,8 @@ void GameEngine::HandleEvents(){
   SDL_PollEvent(&input);
   if(input.type == SDL_QUIT) is_running = false;
 
-  if( game_paused == true )
+  // If game is in the title screen, don't update other events!
+  if( game_titlescreen == true )
   {
     if(input.type == SDL_KEYDOWN) // need this because otherwise game always takes two inputs ._.
     {
@@ -49,13 +53,32 @@ void GameEngine::HandleEvents(){
           is_running = false;
           break;
         case SDLK_RETURN :
-          game_paused = false;
+          Init(); // Initialize a new game!
+          game_titlescreen = false;
           break;
-        case SDLK_i :
 
       }
     }
   }
+  // If game is paused, don't update other events!
+  else if( game_paused == true )
+  {
+    if(input.type == SDL_KEYDOWN) // need this because otherwise game always takes two inputs ._.
+    {
+      switch(input.key.keysym.sym)
+      {
+        case SDLK_ESCAPE :
+          game_titlescreen = true;
+          game_paused = false;
+          break;
+        case SDLK_RETURN :
+          game_paused = false;
+          break;
+
+      }
+    }
+  }
+  // Run events normally
   else
   {
     if(input.type == SDL_KEYDOWN){
@@ -124,7 +147,8 @@ void GameEngine::HandleEvents(){
 
 void GameEngine::UpdateMechanics(){
 
-  if( game_paused == false )
+
+  if( game_titlescreen == false && game_paused == false )
   {
     player->Obj_Update(); //call update on object
     /*for(int i = Background_Size - 1; i >= 0; i--){ //update the background elements
@@ -230,25 +254,30 @@ void GameEngine::Render(){
   //clear screen
   SDL_RenderClear(game_renderer);
 
-  /*for(int i = Background_Size - 1; i >= 0; i--){ //render background
-  BG[i]->BG_Render();
-  }*/
-
-  for(int i = 0; i < TOTAL_TILES; i++){ //render tiles
-    Tiles[i]->Obj_Render(camera);
-  }
-
-
-  PE->draw(game_renderer); //render the particles
-
-  player->Obj_Render(camera.x, camera.y); //render player
-
-  if( game_paused == true )
+  // If in title screen, only render that.
+  if( game_titlescreen == true )
   {
-    Pause_Screen->Obj_Render(0,0);
+    Title_Screen->Obj_Render(0,0);
+  }
+  // Otherwise, render the game.
+  else{
+
+    for(int i = 0; i < TOTAL_TILES; i++){ //render tiles
+      Tiles[i]->Obj_Render(camera);
+    }
+
+    PE->draw(game_renderer); //render the particles
+
+    player->Obj_Render(camera.x, camera.y); //render player
+
+    // If game is paused, render the pause screen over gameplay.
+    if( game_paused == true )
+    {
+      Pause_Screen->Obj_Render(0,0);
+    }
   }
 
-  SDL_RenderPresent(game_renderer); //present game
+  SDL_RenderPresent(game_renderer); //present the game
 }
 
 void GameEngine::Quit(){
