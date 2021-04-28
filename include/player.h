@@ -13,7 +13,7 @@ class Player : public GameObject {
   string get_state();
   string get_prev_state();
   bool get_is_jumping();
-  void Obj_Update();
+  void Obj_Update(int Rect_x, int Rect_y);
   void Obj_Render(int x, int y);
   bool get_is_flipped();
  private:

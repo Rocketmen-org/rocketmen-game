@@ -9,7 +9,7 @@ public:
   GameObject(SDL_Renderer* ren);
   ~GameObject();
 
-  void Obj_Init(const char* image, int f, int d, int x, int y, int frame_w, int frame_h, int w, int h);
+  void Obj_Init(const char* image, int f, int d, int x, int y, int frame_w, int frame_h, int w, int h, int alpha);
   void Obj_Update();
   void Obj_Render(int x, int y);
   void Obj_Quit();

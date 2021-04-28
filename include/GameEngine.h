@@ -11,6 +11,8 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const int LEVEL_WIDTH = 1920;
 const int LEVEL_HEIGHT = 704;
+const int PLAYER_START_X = 50;
+const int PLAYER_START_Y = 100;
 
 const int Background_Size = 2;
 
@@ -53,8 +55,7 @@ public:
 protected:
   Player* player;
 
-  GameObject* Start_Flag;
-  GameObject* Finish_Flag;
+  GameObject* Move_Rect;
   
   Particle_Emitter* PE;
   
@@ -68,6 +69,7 @@ protected:
   SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
   
   bool is_running = true;
+  string Turn;
 };
 
 #endif
