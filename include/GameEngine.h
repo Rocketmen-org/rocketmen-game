@@ -35,9 +35,9 @@ const int MAX_PARTS_FIRE = 100;
 class GameEngine{
 public:
   void Init();
-  
+
   bool Game_Is_Running();
-  
+
   void HandleEvents();
   void UpdateMechanics();
 
@@ -46,30 +46,36 @@ public:
 
   bool Collision_Det(SDL_Rect a, SDL_Rect b);
   void Collision_Res(Player* a, GameObject* b);
-  
+
   void Render();
-  
+
   void Quit();
 
-  
+
 protected:
   Player* player;
 
   GameObject* Move_Rect;
-  
+
+  GameObject* Title_Screen;
+  GameObject* Pause_Screen;
+
   Particle_Emitter* PE;
-  
+
   Background* BG[Background_Size];
 
   Tile* Tiles[TOTAL_TILES];
-  
-  
+
+
   SDL_Window* game_window = NULL;
   SDL_Renderer* game_renderer = NULL;
   SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-  
+
+  bool game_titlescreen = true;
+  bool game_paused = false;
   bool is_running = true;
   string Turn;
 };
 
 #endif
+
