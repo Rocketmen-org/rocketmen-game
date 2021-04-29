@@ -54,7 +54,7 @@ void GameEngine::HandleEvents(){
           is_running = false;
           break;
         case SDLK_RETURN :
-          Init(); // Initialize a new game!
+          //start the game!
           game_titlescreen = false;
           break;
 
