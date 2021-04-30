@@ -27,6 +27,9 @@ public:
   void setAttack(int x, int y);
   void setDefend();
 
+  SDL_Rect getRect();
+  void kill();
+
 private:
   
   SDL_Renderer* obj_renderer;
@@ -36,6 +39,7 @@ private:
 
   bool attack;
   bool turn_over;
+  bool alive;
 };
 
 

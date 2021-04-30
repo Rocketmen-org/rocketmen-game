@@ -23,6 +23,7 @@ class Rocky : public GameObject {
    bool isDone();
   
  private:
+
    bool done;
 };
 
