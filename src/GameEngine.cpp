@@ -5,15 +5,15 @@
 
 
 void GameEngine::Init(){
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) { 
-    std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl; 
+  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
   }
   //Enable gpu_enhanced textures
   IMG_Init(IMG_INIT_PNG);
-  
-  game_window = SDL_CreateWindow("my_game", 
-			       SDL_WINDOWPOS_CENTERED, 
-			       SDL_WINDOWPOS_CENTERED, 
+
+  game_window = SDL_CreateWindow("my_game",
+			       SDL_WINDOWPOS_CENTERED,
+			       SDL_WINDOWPOS_CENTERED,
 			       SCREEN_WIDTH,
 			       SCREEN_HEIGHT, 0);
   game_renderer = SDL_CreateRenderer(game_window,-1,0);
@@ -21,13 +21,21 @@ void GameEngine::Init(){
   player->Obj_Init("./images/char1_sprites.png", 1, 60, PLAYER_START_X, PLAYER_START_Y, 500, 500, TILE_WIDTH, TILE_HEIGHT, 255);
   Move_Rect = new GameObject(game_renderer);
   Move_Rect->Obj_Init("./images/Move_Img.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
+
   Red_Attack_Rect = new GameObject(game_renderer);
   Red_Attack_Rect->Obj_Init("./images/Red_Rect.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
+
   player->set_state("IDLE");
+
+  Title_Screen = new GameObject(game_renderer); // creating title screen image
+  Title_Screen->Obj_Init("./images/titlescreen.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+  Pause_Screen = new GameObject(game_renderer); //creating pause screen image
+  Pause_Screen->Obj_Init("./images/paused.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+
   Turn = "Player";
   Attack = "None";
   PE = new Particle_Emitter();
-  SetTiles();  
+  SetTiles();
 }
 
 bool GameEngine::Game_Is_Running(){
@@ -39,7 +47,48 @@ void GameEngine::HandleEvents(){
   string state_choice;
   SDL_PollEvent(&input);
   if(input.type == SDL_QUIT) is_running = false;
-  //if(Turn == "Attack"){
+
+
+  // If game is in the title screen, don't update other events!
+  if( game_titlescreen == true )
+  {
+    if(input.type == SDL_KEYDOWN) // need this because otherwise game always takes two inputs ._.
+    {
+      switch(input.key.keysym.sym)
+      {
+        case SDLK_ESCAPE :
+          is_running = false;
+          break;
+        case SDLK_RETURN :
+          //start the game!
+          game_titlescreen = false;
+          break;
+
+      }
+    }
+  }
+  // If game is paused, don't update other events!
+  else if( game_paused == true )
+  {
+    if(input.type == SDL_KEYDOWN) // need this because otherwise game always takes two inputs ._.
+    {
+      switch(input.key.keysym.sym)
+      {
+        case SDLK_ESCAPE :
+          game_titlescreen = true;
+          game_paused = false;
+          break;
+        case SDLK_RETURN :
+          game_paused = false;
+          break;
+
+      }
+    }
+  }
+  // Run events normally
+  else
+  {
+    //if(Turn == "Attack"){
   //qualifyer to determine if attack is over
   //Turn == "Move";
   //}
@@ -163,12 +212,17 @@ void GameEngine::HandleEvents(){
     case SDLK_RETURN :
       Turn = "Enemy";
       break;
-    }
+    } 
+  }
   }
 }
 
 void GameEngine::UpdateMechanics(){
-  //Move_Rect->Obj_Update();
+
+  // Check if the game is paused or in the title screen before doing anything
+  if( game_titlescreen == false && game_paused == false )
+  {
+//Move_Rect->Obj_Update();
   if(Turn == "Enemy"){
     std::cout << "fake enemy turn" << std::endl;
     //update enemys actions
@@ -187,16 +241,18 @@ void GameEngine::UpdateMechanics(){
     //set camera
     SetCamera();
   }
-  PE->Update(); //call update on particle emitter
+  PE->Update();
+  }
+
 }
 
 
 void GameEngine::SetCamera(){
   //set the camera to follow the player and be centered on the middle of the screen
   camera.x = (player->get_x_pos() + player->get_width()/2) - SCREEN_WIDTH/2;
-  camera.y = (player->get_y_pos() + player->get_height()/2) - SCREEN_HEIGHT/2; 
+  camera.y = (player->get_y_pos() + player->get_height()/2) - SCREEN_HEIGHT/2;
   //make sure camera doesn't go out of bounds of the level
-  if(camera.x < 0){ 
+  if(camera.x < 0){
     camera.x = 0;
   }
   if(camera.y < 0){
@@ -221,7 +277,7 @@ void GameEngine::SetTiles(){
     for(int i = 0; i < TOTAL_TILES; i++){
       int tile_type_temp = -1;
       map >> tile_type_temp;
-      
+
       if((tile_type_temp >= 0) && (tile_type_temp < TOTAL_TILES_SPRITES)){
 	Tiles[i] = new Tile(game_renderer);
 	Tiles[i]->Obj_Init( x, y, tile_type_temp);
@@ -267,30 +323,40 @@ bool GameEngine::Collision_Det(SDL_Rect a, SDL_Rect b){
 }
 
 void GameEngine::Collision_Res(Player* a, GameObject* b){
-} 
+}
 
 void GameEngine::Render(){
   //set background color
   SDL_SetRenderDrawColor(game_renderer, 135, 206, 235, 255);
   //clear screen
   SDL_RenderClear(game_renderer);
-  
-  /*for(int i = Background_Size - 1; i >= 0; i--){ //render background
-    BG[i]->BG_Render();
-    }*/
-  
-  for(int i = 0; i < TOTAL_TILES; i++){ //render tiles
-    Tiles[i]->Obj_Render(camera);
+
+  // If in title screen, only render that.
+  if( game_titlescreen == true )
+  {
+    Title_Screen->Obj_Render(0,0);
   }
-  
-  PE->draw(game_renderer); //render the particles
-  player->Obj_Render(camera.x, camera.y); //render player
-  if((player->get_x_pos() != Move_Rect->get_x_pos()) || (player->get_y_pos() != Move_Rect->get_y_pos())){
-    Move_Rect->Obj_Render(camera.x, camera.y); //render move selection
-  }
-  if(((player->get_x_pos() != Red_Attack_Rect->get_x_pos()) || (player->get_y_pos() != Red_Attack_Rect->get_y_pos())) && ((Attack == "Locked")||(Attack == "Red")||(Attack == "Blue"))){
+
+  else
+  {
+    for(int i = 0; i < TOTAL_TILES; i++){ //render tiles
+      Tiles[i]->Obj_Render(camera);
+    }
+    PE->draw(game_renderer); //render the particles
+    player->Obj_Render(camera.x, camera.y); //render player
+    if((player->get_x_pos() != Move_Rect->get_x_pos()) || (player->get_y_pos() != Move_Rect->get_y_pos())){
+      Move_Rect->Obj_Render(camera.x, camera.y); //render move selection
+    }
+     if(((player->get_x_pos() != Red_Attack_Rect->get_x_pos()) || (player->get_y_pos() != Red_Attack_Rect->get_y_pos())) && ((Attack == "Locked")||(Attack == "Red")||(Attack == "Blue"))){
     Red_Attack_Rect->Obj_Render(camera.x, camera.y);
+    } 
+    // If game is paused, render the pause screen over gameplay.
+    if( game_paused == true )
+    {
+      Pause_Screen->Obj_Render(0,0);
+    }
   }
+
   SDL_RenderPresent(game_renderer); //present game
 }
 
