@@ -83,7 +83,7 @@ void Player::set_prev_state(string A){
 }
 
 bool Player::get_is_jumping(){
-  return is_jumping; //returns true if the player is mid jump
+  return true;
 }
 
 string Player::get_prev_state(){
