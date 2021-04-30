@@ -28,9 +28,11 @@ void GameEngine::Init(){
   player->set_state("IDLE");
 
   Title_Screen = new GameObject(game_renderer); // creating title screen image
-  Title_Screen->Obj_Init("./images/titlescreen.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+  Title_Screen->Obj_Init("./images/screen_title.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
   Pause_Screen = new GameObject(game_renderer); //creating pause screen image
-  Pause_Screen->Obj_Init("./images/paused.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+  Pause_Screen->Obj_Init("./images/screen_paused.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+  BG = new GameObject(game_renderer); //creating pause screen image
+  BG->Obj_Init("./images/background.png", 1, 1, 0, 0, 5000, 5000, LEVEL_WIDTH, LEVEL_HEIGHT, 255);
 
   Turn = "Player";
   Attack = "None";
@@ -349,6 +351,7 @@ void GameEngine::Render(){
   }
   else
     {
+      BG->Obj_Render(camera.x, camera.y); //render background
       for(int i = 0; i < TOTAL_TILES; i++){ //render tiles
 	Tiles[i]->Obj_Render(camera);
       }

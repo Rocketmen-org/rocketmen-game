@@ -15,7 +15,7 @@ class Sprite {
   void set_state(int s);
   void set_frames(int f);
  private:
-  SDL_Texture* sprite_image;
+  //SDL_Texture* sprite_image;
   SDL_Rect sprite_rect;
   
   int frames = 0;

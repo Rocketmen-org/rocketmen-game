@@ -23,21 +23,9 @@ SDL_Rect Sprite::sprite_update(){
     prev_state = state;
   }
   
-  int time = (int) (SDL_GetTicks() / duration) % frames;
-  
-  static int last_frame = 0;
-  //check if the last frame seen is the different from current frame
-  if(last_frame != time){
-    //reset if time is back to 0
-    if(time < 1){
-      sprite_rect.x = 0;
-    }
-    else{
-      //move to next frame of animation
-      sprite_rect.x += sprite_rect.w;
-    }
-  }
-  last_frame = time;
+  int frame = (int) (SDL_GetTicks() / duration) % frames;
+
+  sprite_rect.x = frame * sprite_rect.w;
 
   sprite_rect.y = sprite_rect.h * state;  //set the y value of the frame
   return(sprite_rect);

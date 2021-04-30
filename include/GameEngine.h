@@ -9,8 +9,8 @@
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-const int LEVEL_WIDTH = 1920;
-const int LEVEL_HEIGHT = 704;
+const int LEVEL_WIDTH = 768;
+const int LEVEL_HEIGHT = 768;
 const int PLAYER_START_X = 64;
 const int PLAYER_START_Y = 128;
 
@@ -63,10 +63,9 @@ protected:
   GameObject* Red_Attack_Rect;
   GameObject* Title_Screen;
   GameObject* Pause_Screen;
+  GameObject* BG;
 
   Particle_Emitter* PE;
-
-  Background* BG[Background_Size];
 
   Tile* Tiles[TOTAL_TILES];
 

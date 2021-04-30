@@ -22,8 +22,8 @@ void Tile::Obj_Init(int x, int y, int TileType){
   frame_rect.h = TILE_HEIGHT;
   //set what frame corrisponds to the tile type passed in
   if(TileType == 00){
-    frame_rect.x = 0 * TILE_WIDTH;
-    frame_rect.y = 1 * TILE_HEIGHT;
+    frame_rect.x = 3 * TILE_WIDTH;
+    frame_rect.y = 4 * TILE_HEIGHT;
   }
   else if(TileType == 01){
     frame_rect.x = 1 * TILE_WIDTH;
