@@ -268,10 +268,10 @@ void GameEngine::UpdateMechanics(){
       else if(Turn == "Attack"){
 	//some sort of rocket->Update();
 	Rocket_Red->Obj_Update(camera);
-	if(Rocket_Red->Collison(//rect of rocky)){
+	if(Rocket_Red->Collison(rocky->getRect())){
 	  Rocket_Red->set_alive(false);
 	  //kill rocky
-	  PE->PE_Init("./images/FireWork_Pix.png", game_renderer, //position rocky is, ///rocky y, 7, 7, FIREWORK)  
+	  PE->PE_Init("./images/FireWork_Pix.png", game_renderer, rocky->getRect().x, rocky->getRect().y, 7, 7, FIREWORK);  
 	}
 	player->Obj_Update(player->get_x_pos(), player->get_y_pos());
       }
