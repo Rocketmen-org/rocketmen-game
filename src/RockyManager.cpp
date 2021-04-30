@@ -24,6 +24,7 @@ void RockyManager::init(const char* image){
 
   attack = false;
   turn_over = false;
+  alive = true;
 }
 
 void RockyManager::update(){
@@ -48,8 +49,10 @@ void RockyManager::update(){
 }
 
 void RockyManager::render(int x, int y){
-  for(int i = 0; i < NUM_ROCKYS; i++){
-    rockys[i]->Obj_Render(x, y);
+  if (alive){
+    for(int i = 0; i < NUM_ROCKYS; i++){
+      rockys[i]->Obj_Render(x, y);
+    }
   }
 }
 
@@ -70,3 +73,11 @@ void RockyManager::setAttack(int x, int y){
 }
 
 void RockyManager::setDefend(){attack = false;}
+
+SDL_Rect RockyManager::getRect(){
+  return rockys[0]->get_rect();
+}
+
+void RockyManager::kill(){
+  alive = false;
+}
