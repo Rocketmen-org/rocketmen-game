@@ -50,7 +50,13 @@ bool Rocky::move(struct coordinate dest){
   return false;
 }
 
-void Rocky::attack(){}
+void Rocky::attack(){
+  //set sprite to Attack Animation
+  Obj_sprite->set_state(8);
+  Obj_sprite->set_frames(6);
+  Obj_sprite->set_duration(100);
+  Obj_sprite->set_play_until_finished(true);
+}
 
 void Rocky::Obj_Update(){
   //set sprite to Idle Animation
