@@ -16,14 +16,20 @@ void Sprite::Sprite_init(const char* image, SDL_Renderer* ren, int f, int d, int
 }
 
 SDL_Rect Sprite::sprite_update(){
+  
+  int frame = (int) (SDL_GetTicks() / duration) % frames;
+
   if(state != prev_state){
     //if the state has changed since last call
-    sprite_rect.x = 0;
-    sprite_rect.y = 0;
+    offset = frames + (-frame);
     prev_state = state;
   }
   
-  int frame = (int) (SDL_GetTicks() / duration) % frames;
+  frame += offset;
+  frame %= frames;
+
+  if (frame == frames - 1)
+    play_until_finished = false;
 
   sprite_rect.x = frame * sprite_rect.w;
 
@@ -39,13 +45,20 @@ void Sprite::sprite_quit(){
 }
 
 void Sprite::set_duration(int d){
-  duration = d; //sets the duration
+  if (!play_until_finished)
+    duration = d; //sets the duration
 }
 
 void Sprite::set_state(int s){
-  state = s; //sets the state
+  if (!play_until_finished)
+    state = s; //sets the state
 }
 
 void Sprite::set_frames(int f){
-  frames = f; //set the frames
+  if (!play_until_finished)
+    frames = f; //set the frames
+}
+
+void Sprite::set_play_until_finished(bool p){
+  play_until_finished = p;
 }
