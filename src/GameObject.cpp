@@ -92,3 +92,13 @@ int GameObject::get_width(){
 SDL_Rect GameObject::get_rect(){
   return obj_rect;
 }
+
+void GameObject::set_height(int h){
+  obj_rect.h = h;
+}
+
+void GameObject::set_width(int w){
+  obj_rect.w = w;
+}
+
+

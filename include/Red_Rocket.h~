@@ -1,0 +1,17 @@
+#ifndef RED_ROCKET_H
+#define RED_ROCKET_H
+
+#include "GameObject.h"
+#include "game.h"
+
+class Red_Rocket : public GameObject {
+ public:
+  Red_Rocket(SDL_Renderer* ren);
+  ~Red_Rocket();
+  void Obj_Update();
+  void Obj_Render(int x, int y);
+  bool get_is_flipped();
+ private:
+};
+
+#endif

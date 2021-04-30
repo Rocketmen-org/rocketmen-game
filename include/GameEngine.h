@@ -11,8 +11,8 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const int LEVEL_WIDTH = 1920;
 const int LEVEL_HEIGHT = 704;
-const int PLAYER_START_X = 50;
-const int PLAYER_START_Y = 100;
+const int PLAYER_START_X = 64;
+const int PLAYER_START_Y = 128;
 
 const int Background_Size = 2;
 
@@ -55,8 +55,12 @@ public:
 protected:
   Player* player;
 
+  //Blue_Rocket* rocket_blue
+  //Red_Rocket* rocket_red
+
   GameObject* Move_Rect;
 
+  GameObject* Red_Attack_Rect;
   GameObject* Title_Screen;
   GameObject* Pause_Screen;
 
@@ -75,6 +79,9 @@ protected:
   bool game_paused = false;
   bool is_running = true;
   string Turn;
+  string Attack;
+  int AP = 1;
+  int MP = 1;
 };
 
 #endif

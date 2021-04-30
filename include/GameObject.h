@@ -18,7 +18,9 @@ public:
   int get_y_pos();
   int get_x_pos();
   int get_height();
+  void set_height(int h);
   int get_width();
+  void set_width(int w);
   SDL_Rect get_rect();
   void set_y_pos(int y);
   void set_x_pos(int x);

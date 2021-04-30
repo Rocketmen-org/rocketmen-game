@@ -19,10 +19,7 @@ class Player : public GameObject {
  private:
   string State;
   string Prev_State;
-  bool is_jumping = false;
-  int total_jump_frames = 180;
   int count = 0;
-  int g = 1;
   //int y_prev_pos;
 };
 
