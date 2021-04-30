@@ -267,11 +267,12 @@ void GameEngine::UpdateMechanics(){
       }
       else if(Turn == "Attack"){
 	//some sort of rocket->Update();
-	Rocket_Red->Obj_Update(camera);
-	if(Rocket_Red->Collison(rocky->getRect())){
+	Rocket_Red->Obj_Update(&camera);
+	SDL_Rect temp = rocky->getRect();
+	if(Rocket_Red->Collision(&temp)){
 	  Rocket_Red->set_alive(false);
-	  //kill rocky
-	  PE->PE_Init("./images/FireWork_Pix.png", game_renderer, rocky->getRect().x, rocky->getRect().y, 7, 7, FIREWORK);  
+	  rocky->kill();
+	  PE->PE_Init("./images/FireWork_Pix.png", game_renderer, temp.x, temp.y, 7, 7, FIREWORK);  
 	}
 	player->Obj_Update(player->get_x_pos(), player->get_y_pos());
       }
@@ -368,8 +369,6 @@ bool GameEngine::Collision_Det(SDL_Rect a, SDL_Rect b){
 
 void GameEngine::Collision_Res(Player* a, GameObject* b){
 }
-
-void GameEngine::Collision_Res(
 
 void GameEngine::Render(){
   //set background color
