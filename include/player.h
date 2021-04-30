@@ -10,8 +10,8 @@ class Player : public GameObject {
   ~Player();
   void set_state(string A);
   void set_prev_state(string A);
-  string get_state();
   void set_sprite(string A);
+  string get_state();
   string get_prev_state();
   bool get_is_jumping();
   void Obj_Update(int Rect_x, int Rect_y);

@@ -14,6 +14,8 @@ class Sprite {
   void set_duration(int d);
   void set_state(int s);
   void set_frames(int f);
+  void set_play_until_finished(bool p);
+
  private:
   //SDL_Texture* sprite_image;
   SDL_Rect sprite_rect;
@@ -23,6 +25,8 @@ class Sprite {
   
   int duration;
   int state;
+  int offset;
+  bool play_until_finished;
 
   SDL_Renderer* game_renderer;
 };

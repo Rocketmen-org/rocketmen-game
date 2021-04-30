@@ -1,4 +1,6 @@
 #include "Red_Rocket.h"
+#include "GameObject.h"
+
 
 Red_Rocket::Red_Rocket(SDL_Renderer* ren) : GameObject(ren)
 { 
@@ -6,9 +8,8 @@ Red_Rocket::Red_Rocket(SDL_Renderer* ren) : GameObject(ren)
 
 Red_Rocket::~Red_Rocket(){}
 
-
-void Red_Rocket::Obj_Update(SDL_Rect* Camera){
-  if(!this->Collision(Camera)){
+void Red_Rocket::Obj_Update(SDL_Rect* camera){
+  if(!this->Collision(camera)){
     alive = false;
   }
   else if(direction == "Up"){
@@ -26,7 +27,9 @@ void Red_Rocket::Obj_Update(SDL_Rect* Camera){
 }
 
 bool Red_Rocket::Collision(SDL_Rect* b){
+
    //create one box
+  //create one box
   int Left_A = obj_rect.x + 40;
   int Right_A = Left_A + obj_rect.w - 40;
   int Top_A = obj_rect.y;
@@ -56,7 +59,9 @@ bool Red_Rocket::Collision(SDL_Rect* b){
 }
 
 void Red_Rocket::Obj_Render(int x, int y){
+
   SDL_Rect temp;
+
   temp.x = obj_rect.x - x;
   temp.y = obj_rect.y - y;
   temp.w = obj_rect.w;
@@ -65,10 +70,17 @@ void Red_Rocket::Obj_Render(int x, int y){
     SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 90, NULL, SDL_FLIP_NONE);
   }
   else if(direction == "Left"){
+
     SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 270, NULL, SDL_FLIP_NONE);
   }
   else if(direction == "Up"){
      SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 0, NULL, SDL_FLIP_HORIZONTAL);
+
+     SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 270, NULL, SDL_FLIP_NONE);
+  }
+  else if(direction == "Up"){
+    SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 0, NULL, SDL_FLIP_NONE);
+
   }
   else if(direction == "Down"){
     SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 0, NULL, SDL_FLIP_VERTICAL);
@@ -90,3 +102,4 @@ bool Red_Rocket::is_alive(){
 void Red_Rocket::set_alive(bool a){
   alive = a;
 }
+
