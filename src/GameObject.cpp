@@ -4,7 +4,8 @@ GameObject::GameObject(SDL_Renderer* ren){
   obj_renderer = ren;
 }
 
-GameObject::~GameObject(){}
+GameObject::~GameObject(){
+}
 
 void GameObject::Obj_Init(const char* image, int f, int d, int x, int y, int frame_w, int frame_h, int w, int h, int alpha){
   //initalize the object image and location
