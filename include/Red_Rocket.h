@@ -8,11 +8,16 @@ class Red_Rocket : public GameObject {
  public:
   Red_Rocket(SDL_Renderer* ren);
   ~Red_Rocket();
-  void Obj_Update(SDL_Rect* player, string direction);
+  void Obj_Update(SDL_Rect* camera);
   bool Collision(SDL_Rect* other); 
   void Obj_Render(int x, int y);
-  bool get_is_flipped();
+  void set_direction(string d);
+  string get_direction();
+  void set_alive(bool a);
+  bool is_alive();
  private:
+  string direction;
+  bool alive;
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "game.h"
 #include "player.h"
+#include "Red_Rocket.h"
 #include "RockyManager.h"
 #include "Tiles.h"
 #include "Background.h"
@@ -58,7 +59,7 @@ protected:
   RockyManager* rocky;
 
   //Blue_Rocket* rocket_blue
-  //Red_Rocket* rocket_red
+  Red_Rocket* Rocket_Red;
 
   GameObject* Move_Rect;
 

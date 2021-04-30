@@ -58,16 +58,7 @@ void Player::Obj_Render(int x, int y){
   temp.y = obj_rect.y - y;
   temp.w = obj_rect.w;
   temp.h = obj_rect.h;
-  if(State == "RUNLEFT"){ //if running left flip the render
-    SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 0, NULL, SDL_FLIP_HORIZONTAL);
-  }
-  else if((State == "IDLE" || State == "RUNUP" || State == "RUNDOWN") && Prev_State == "RUNLEFT"){
-    //if switches to idle or jump from left keep the flip
-    SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 0, NULL, SDL_FLIP_HORIZONTAL);
-  }
-  else{ //render normally
-    SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 0, NULL, SDL_FLIP_NONE);
-  }
+  SDL_RenderCopyEx(obj_renderer, obj_texture, &frame_rect, &temp, 0, NULL, SDL_FLIP_NONE);
 }
 
 void Player::set_state(string A){
@@ -89,3 +80,33 @@ bool Player::get_is_jumping(){
 string Player::get_prev_state(){
   return Prev_State;
 }
+
+void Player::set_sprite(string A){
+  if(A == "Right"){
+    std::cout << "enter shoot" << std::endl;
+    Obj_sprite->set_state(5);
+    Obj_sprite->set_frames(6);
+    Obj_sprite->set_duration(200);
+  }
+  else if(A == "Left"){
+    Obj_sprite->set_state(6);
+    Obj_sprite->set_frames(6);
+    Obj_sprite->set_duration(200);
+  }
+  else if(A == "Up"){
+    Obj_sprite->set_state(7);
+    Obj_sprite->set_frames(6);
+    Obj_sprite->set_duration(200);
+  }
+  else if(A == "Up"){
+    Obj_sprite->set_state(8);
+    Obj_sprite->set_frames(6);
+    Obj_sprite->set_duration(200);
+  }
+  /*else if(A == "Idle"){
+    Obj_sprite->set_state(0);
+    Obj_sprite->set_frames(6);
+    Obj_sprite->set_duration(200);
+    }*/
+}
+
