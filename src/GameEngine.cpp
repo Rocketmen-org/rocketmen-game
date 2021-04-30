@@ -22,6 +22,10 @@ void GameEngine::Init(){
   Move_Rect = new GameObject(game_renderer);
   Move_Rect->Obj_Init("./images/Move_Img.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
 
+ 
+  rocky = new RockyManager(game_renderer); //create rocky
+  rocky->init("./images/rocky_sprites.png");
+
   Red_Attack_Rect = new GameObject(game_renderer);
   Red_Attack_Rect->Obj_Init("./images/Red_Rect.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
 
@@ -231,16 +235,20 @@ void GameEngine::HandleEvents(){
 void GameEngine::UpdateMechanics(){
 
   // Check if the game is paused or in the title screen before doing anything
-  if( game_titlescreen == false && game_paused == false )
-    {
+  if( game_titlescreen == false && game_paused == false ){
       //Move_Rect->Obj_Update();
       if(Turn == "Enemy"){
-	std::cout << "fake enemy turn" << std::endl;
-	//update enemys actions
-	Turn = "Player";
-	Attack = "None";
-	MP = 1;
-	AP = 1;
+	std::cout << "enemy turn" << std::endl;
+	if (rocky->defend()){
+	  rocky->setAttack((rand() % 4 + 4) * 64, (rand() % 4 + 4) * 64); //start enemy attack
+	}
+	if(rocky->turnOver()){
+	  rocky->setDefend(); //start enemy defense
+	  Turn = "Player";
+	  Attack = "None";
+	  MP = 1;
+	  AP = 1;
+	}
       }
       else if(Turn == "Attack"){
 	//some sort of rocket->Update();
@@ -255,6 +263,7 @@ void GameEngine::UpdateMechanics(){
       else{
 	player->Obj_Update(player->get_x_pos(), player->get_y_pos());
       }
+      rocky->update(); //update enemy
       PE->Update();
     }
 }
@@ -357,6 +366,7 @@ void GameEngine::Render(){
       }
       PE->draw(game_renderer); //render the particles
       player->Obj_Render(camera.x, camera.y); //render player
+      rocky->render(camera.x, camera.y); //render enemy
       if((player->get_x_pos() != Move_Rect->get_x_pos()) || (player->get_y_pos() != Move_Rect->get_y_pos())){
 	Move_Rect->Obj_Render(camera.x, camera.y); //render move selection
       }

@@ -16,14 +16,14 @@ void Player::Obj_Update(int Rect_x, int Rect_y){
     //set walk right animation
     Obj_sprite->set_state(1);
     Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
+    Obj_sprite->set_duration(150);
   }
   if(obj_rect.x > Rect_x){
     obj_rect.x -= 2;
     //set walk left animation
     Obj_sprite->set_state(2);
     Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
+    Obj_sprite->set_duration(150);
   }
   if(obj_rect.x == Rect_x){
     if(obj_rect.y < Rect_y){
@@ -31,7 +31,7 @@ void Player::Obj_Update(int Rect_x, int Rect_y){
       //set walk down animation
       Obj_sprite->set_state(4);
       Obj_sprite->set_frames(6);
-      Obj_sprite->set_duration(200);					
+      Obj_sprite->set_duration(150);					
     }
     
     if(obj_rect.y > Rect_y){
@@ -39,14 +39,14 @@ void Player::Obj_Update(int Rect_x, int Rect_y){
       //set walk up animation
       Obj_sprite->set_state(3);
       Obj_sprite->set_frames(6);
-      Obj_sprite->set_duration(200);   
+      Obj_sprite->set_duration(150);   
     }
   }
   if(obj_rect.x == Rect_x && obj_rect.y == Rect_y){
     //set sprite to Idle Animation
     Obj_sprite->set_state(0);
     Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
+    Obj_sprite->set_duration(150);
   }
   
   frame_rect = Obj_sprite->sprite_update(); //update the player sprite

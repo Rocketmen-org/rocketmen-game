@@ -3,6 +3,7 @@
 
 #include "game.h"
 #include "player.h"
+#include "RockyManager.h"
 #include "Tiles.h"
 #include "Background.h"
 #include "Particle_Emitter.h"
@@ -54,6 +55,7 @@ public:
 
 protected:
   Player* player;
+  RockyManager* rocky;
 
   //Blue_Rocket* rocket_blue
   //Red_Rocket* rocket_red
