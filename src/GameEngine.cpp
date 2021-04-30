@@ -24,7 +24,7 @@ void GameEngine::Init(){
 
   Red_Attack_Rect = new GameObject(game_renderer);
   Red_Attack_Rect->Obj_Init("./images/Red_Rect.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
-
+  
   player->set_state("IDLE");
 
   Title_Screen = new GameObject(game_renderer); // creating title screen image
@@ -33,7 +33,10 @@ void GameEngine::Init(){
   Pause_Screen->Obj_Init("./images/screen_paused.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
   BG = new GameObject(game_renderer); //creating pause screen image
   BG->Obj_Init("./images/background.png", 1, 1, 0, 0, 5000, 5000, LEVEL_WIDTH, LEVEL_HEIGHT, 255);
-
+  
+  Rocket_Red = new Red_Rocket(game_renderer);
+  Rocket_Red->Obj_Init("./images/rocket_red.png", 1, 1, player->get_x_pos(), player->get_y_pos(), 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 255);
+  
   Turn = "Player";
   Attack = "None";
   PE = new Particle_Emitter();
@@ -95,9 +98,10 @@ void GameEngine::HandleEvents(){
       //Turn == "Move";
       //}
       if(Turn == "Attack"){
-	/*if(rocket == Destroyed){
+	if(!Rocket_Red->is_alive()){
 	  Turn = "Player";
-	  }*/
+	  player->set_state("Idle");
+	}
       }
       if(Turn == "Move"){
 	if((player->get_x_pos() == Move_Rect->get_x_pos()) && (player->get_y_pos() == Move_Rect->get_y_pos()))
@@ -113,6 +117,7 @@ void GameEngine::HandleEvents(){
 	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
 	  Red_Attack_Rect->set_width(player->get_x_pos() - camera.x);
 	  Red_Attack_Rect->set_height(TILE_HEIGHT);
+	  Rocket_Red->set_direction("Left");
 	  break;
 	case SDLK_d : 
 	  //set roocket to fire right
@@ -121,6 +126,7 @@ void GameEngine::HandleEvents(){
 	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
 	  Red_Attack_Rect->set_width((camera.x + camera.w) - (player->get_x_pos() + TILE_WIDTH));
 	  Red_Attack_Rect->set_height(TILE_HEIGHT);
+	   Rocket_Red->set_direction("Right");
 	  break;
 	case SDLK_w : 
 	  //set rocket to fire up
@@ -129,6 +135,7 @@ void GameEngine::HandleEvents(){
 	  Red_Attack_Rect->set_y_pos(camera.y);
 	  Red_Attack_Rect->set_width(TILE_WIDTH);
 	  Red_Attack_Rect->set_height(player->get_y_pos() - camera.y);
+	   Rocket_Red->set_direction("Up");
 	  break;
 	case SDLK_s :  
 	  //set rocket to fire down
@@ -137,6 +144,7 @@ void GameEngine::HandleEvents(){
 	  Red_Attack_Rect->set_y_pos(player->get_y_pos() + TILE_HEIGHT);
 	  Red_Attack_Rect->set_width(TILE_WIDTH);
 	  Red_Attack_Rect->set_height((camera.y + camera.h) - (player->get_y_pos() + TILE_HEIGHT));
+	   Rocket_Red->set_direction("Down");
 	  break;
 	case SDLK_j :
 	  Attack = "None";
@@ -145,12 +153,14 @@ void GameEngine::HandleEvents(){
 	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
 	  Red_Attack_Rect->set_width(TILE_WIDTH);
 	  Red_Attack_Rect->set_height(TILE_HEIGHT);
+	  Rocket_Red->set_alive(false);
 	  break;
 	case SDLK_SPACE :
 	  Attack = "Locked";
+	  Turn = "Attack"; 
 	  AP -= 1;
+	  player->set_sprite(Rocket_Red->get_direction());
 	  break;
-        
 	}
       }
       else if(input.type == SDL_KEYDOWN && (Turn == "Player") && ((Attack == "None")||(Attack == "Locked"))){
@@ -201,6 +211,9 @@ void GameEngine::HandleEvents(){
 	  Move_Rect->set_height(TILE_HEIGHT);
 	  if(AP != 0){
 	    Attack = "Red";
+	    Rocket_Red->set_alive(true);
+	    Rocket_Red->set_x_pos(player->get_x_pos());
+	    Rocket_Red->set_y_pos(player->get_y_pos());
 	  }
 	  break;
 	case SDLK_k :
@@ -244,6 +257,8 @@ void GameEngine::UpdateMechanics(){
       }
       else if(Turn == "Attack"){
 	//some sort of rocket->Update();
+	Rocket_Red->Obj_Update(&camera);
+	player->Obj_Update(player->get_x_pos(), player->get_y_pos());
       }
       else if(Turn == "Move"){
 	std::cout << "Move turn" << std::endl;
@@ -360,12 +375,14 @@ void GameEngine::Render(){
       if((player->get_x_pos() != Move_Rect->get_x_pos()) || (player->get_y_pos() != Move_Rect->get_y_pos())){
 	Move_Rect->Obj_Render(camera.x, camera.y); //render move selection
       }
-      if(((player->get_x_pos() != Red_Attack_Rect->get_x_pos()) || (player->get_y_pos() != Red_Attack_Rect->get_y_pos())) && ((Attack == "Locked")||(Attack == "Red")||(Attack == "Blue"))){
+      if(((player->get_x_pos() != Red_Attack_Rect->get_x_pos()) || (player->get_y_pos() != Red_Attack_Rect->get_y_pos())) && ((Attack == "Red")||(Attack == "Blue"))){
 	Red_Attack_Rect->Obj_Render(camera.x, camera.y);
       }
-      
+      if(Rocket_Red->is_alive() && ((Rocket_Red->get_x_pos() != player->get_x_pos()) || (Rocket_Red->get_y_pos() != player->get_y_pos()))){
+	Rocket_Red->Obj_Render(camera.x, camera.y);
+      }
       // If game is paused, render the pause screen over gameplay.
-      if( game_paused == true )
+      if( game_paused == true)
 	{
 	  Pause_Screen->Obj_Render(0,0);
 	}
