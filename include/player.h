@@ -20,6 +20,7 @@ class Player : public GameObject {
  private:
   string State;
   string Prev_State;
+  string Shoot_direction;
   int count = 0;
   //int y_prev_pos;
 };
