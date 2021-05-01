@@ -5,12 +5,13 @@
 Player::Player(SDL_Renderer* ren) : GameObject(ren)
 {
   x_vel = 0;
-  y_vel = 0; 
+  y_vel = 0;
 }
 
 Player::~Player(){}
 
 void Player::Obj_Update(int Rect_x, int Rect_y){
+
   if(obj_rect.x < Rect_x){
     obj_rect.x += 2;
     //set walk right animation
@@ -31,15 +32,15 @@ void Player::Obj_Update(int Rect_x, int Rect_y){
       //set walk down animation
       Obj_sprite->set_state(4);
       Obj_sprite->set_frames(6);
-      Obj_sprite->set_duration(150);					
+      Obj_sprite->set_duration(150);
     }
-    
+
     if(obj_rect.y > Rect_y){
       obj_rect.y -= 2;
       //set walk up animation
       Obj_sprite->set_state(3);
       Obj_sprite->set_frames(6);
-      Obj_sprite->set_duration(150);   
+      Obj_sprite->set_duration(150);
     }
   }
   if(obj_rect.x == Rect_x && obj_rect.y == Rect_y){
@@ -48,7 +49,34 @@ void Player::Obj_Update(int Rect_x, int Rect_y){
     Obj_sprite->set_frames(6);
     Obj_sprite->set_duration(150);
   }
-  
+
+  // Only enter this if the player is in "firing" state
+  // For some reason, a duration of 200 is the only one that prevents the sprite
+  // from repeating itself?
+  if( State == "Firing" ){
+    if( Shoot_direction == "Right"){
+      std::cout << "enter shoot" << std::endl;
+      Obj_sprite->set_state(5);
+      Obj_sprite->set_frames(6);
+      Obj_sprite->set_duration(200);
+    }
+    else if(Shoot_direction == "Left"){
+      Obj_sprite->set_state(6);
+      Obj_sprite->set_frames(6);
+      Obj_sprite->set_duration(200);
+    }
+    else if(Shoot_direction == "Up"){
+      Obj_sprite->set_state(7);
+      Obj_sprite->set_frames(6);
+      Obj_sprite->set_duration(200);
+    }
+    else if(Shoot_direction == "Down"){
+      Obj_sprite->set_state(8);
+      Obj_sprite->set_frames(6);
+      Obj_sprite->set_duration(200);
+    }
+  }
+
   frame_rect = Obj_sprite->sprite_update(); //update the player sprite
 }
 
@@ -81,33 +109,8 @@ string Player::get_prev_state(){
   return Prev_State;
 }
 
-void Player::set_sprite(string A){
-  if(A == "Right"){
-    std::cout << "enter shoot" << std::endl;
-    Obj_sprite->set_state(5);
-    Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
-  }
-  else if(A == "Left"){
-    Obj_sprite->set_state(6);
-    Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
-  }
-  else if(A == "Up"){
-    Obj_sprite->set_state(7);
-    Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
-  }
-  else if(A == "Up"){
-    Obj_sprite->set_state(8);
-    Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
-  }
-  /*else if(A == "Idle"){
-    Obj_sprite->set_state(0);
-    Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
-    }*/
+void Player::set_direction(string A){
+  Shoot_direction = A;
 }
 
 
