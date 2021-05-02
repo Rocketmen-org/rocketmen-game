@@ -22,13 +22,13 @@ void GameEngine::Init(){
   Move_Rect = new GameObject(game_renderer);
   Move_Rect->Obj_Init("./images/Move_Img.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
 
-  
+
   rocky = new RockyManager(game_renderer); //create rocky
   rocky->init("./images/rocky_sprites.png");
 
   Red_Attack_Rect = new GameObject(game_renderer);
   Red_Attack_Rect->Obj_Init("./images/Red_Rect.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
-  
+
   player->set_state("IDLE");
 
   Title_Screen = new GameObject(game_renderer); // creating title screen image
@@ -37,12 +37,12 @@ void GameEngine::Init(){
   Pause_Screen->Obj_Init("./images/screen_paused.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
   BG = new GameObject(game_renderer); //creating pause screen image
   BG->Obj_Init("./images/background.png", 1, 1, 0, 0, 5000, 5000, LEVEL_WIDTH, LEVEL_HEIGHT, 255);
-  
+
   Rocket_Red = new Red_Rocket(game_renderer);
   Rocket_Red->Obj_Init("./images/rocket_red.png", 1, 1, player->get_x_pos(), player->get_y_pos(), 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 255);
 
   PE = new Particle_Emitter();
-  
+
   Turn = "Player";
   Attack = "None";
   PE = new Particle_Emitter();
@@ -63,188 +63,180 @@ void GameEngine::HandleEvents(){
   // If game is in the title screen, don't update other events!
   if( game_titlescreen == true )
   {
-    if(input.type == SDL_KEYDOWN) // need this because otherwise game always takes two inputs ._.
-      {
-	switch(input.key.keysym.sym)
-	  {
-	  case SDLK_ESCAPE :
-	    is_running = false;
-	    break;
+    if(input.type == SDL_KEYDOWN) // need this because otherwise game always takes two inputs
+    {
+      switch(input.key.keysym.sym)
+    	{
+    	  case SDLK_ESCAPE :
+    	    is_running = false;
+    	    break;
         case SDLK_RETURN :
           //start the game!
           game_titlescreen = false;
           break;
-	  
-	  }
-      }
+	    }
+    }
   }
   // If game is paused, don't update other events!
   else if( game_paused == true )
+  {
+    if(input.type == SDL_KEYDOWN) // need this because otherwise game always takes two inputs
     {
-      if(input.type == SDL_KEYDOWN) // need this because otherwise game always takes two inputs ._.
-	{
-	  switch(input.key.keysym.sym)
-	    {
-	    case SDLK_ESCAPE :
-	      game_titlescreen = true;
-	      game_paused = false;
-	      break;
-	    case SDLK_RETURN :
-	      game_paused = false;
-	      break;
-	      
-	    }
-	}
+    	switch(input.key.keysym.sym)
+    	{
+    	  case SDLK_ESCAPE :
+    	    game_titlescreen = true;
+    	    game_paused = false;
+    	    break;
+    	  case SDLK_RETURN :
+    	    game_paused = false;
+    	    break;
+    	}
     }
+  }
   // Run events normally
   else
-    {
-      //if(Turn == "Attack"){
-      //qualifyer to determine if attack is over
-      //Turn == "Move";
-      //}
-      if(Turn == "Attack"){
-	if(!Rocket_Red->is_alive()){
-	  Turn = "Player";
-	  player->set_state("Idle");
-	}
-      }
-      if(Turn == "Move"){
-	if((player->get_x_pos() == Move_Rect->get_x_pos()) && (player->get_y_pos() == Move_Rect->get_y_pos()))
-	  Turn = "Player";
-      }
-      if(input.type == SDL_KEYDOWN && (Attack == "Red")){
-	std::cout << "enter" << std::endl;
-	switch(input.key.keysym.sym){
-	case SDLK_a : 
-	  //set rocket to fire left
-	  //set attack rectangle to left
-	  Red_Attack_Rect->set_x_pos(camera.x);
-	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
-	  Red_Attack_Rect->set_width(player->get_x_pos() - camera.x);
-	  Red_Attack_Rect->set_height(TILE_HEIGHT);
-	  Rocket_Red->set_direction("Left");
-	  break;
-	case SDLK_d : 
-	  //set roocket to fire right
-	  //set attack rectangle to right
-	  Red_Attack_Rect->set_x_pos(player->get_x_pos() + TILE_WIDTH);
-	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
-	  Red_Attack_Rect->set_width((camera.x + camera.w) - (player->get_x_pos() + TILE_WIDTH));
-	  Red_Attack_Rect->set_height(TILE_HEIGHT);
-	   Rocket_Red->set_direction("Right");
-	  break;
-	case SDLK_w : 
-	  //set rocket to fire up
-	  //set attack rectangle to up
-	  Red_Attack_Rect->set_x_pos(player->get_x_pos());
-	  Red_Attack_Rect->set_y_pos(camera.y);
-	  Red_Attack_Rect->set_width(TILE_WIDTH);
-	  Red_Attack_Rect->set_height(player->get_y_pos() - camera.y);
-	   Rocket_Red->set_direction("Up");
-	  break;
-	case SDLK_s :  
-	  //set rocket to fire down
-	  //set attack rectangle to down
-	  Red_Attack_Rect->set_x_pos(player->get_x_pos());
-	  Red_Attack_Rect->set_y_pos(player->get_y_pos() + TILE_HEIGHT);
-	  Red_Attack_Rect->set_width(TILE_WIDTH);
-	  Red_Attack_Rect->set_height((camera.y + camera.h) - (player->get_y_pos() + TILE_HEIGHT));
-	   Rocket_Red->set_direction("Down");
-	  break;
-	case SDLK_j :
-	  Attack = "None";
-	  //set rectangle to none setting
-	  Red_Attack_Rect->set_x_pos(player->get_x_pos());
-	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
-	  Red_Attack_Rect->set_width(TILE_WIDTH);
-	  Red_Attack_Rect->set_height(TILE_HEIGHT);
-	  Rocket_Red->set_alive(false);
-	  break;
-	case SDLK_SPACE :
-	  Attack = "Locked";
-	  Turn = "Attack"; 
-	  AP -= 1;
-	  player->set_sprite(Rocket_Red->get_direction());
-	  break;
-	}
-      }
-      else if(input.type == SDL_KEYDOWN && (Turn == "Player") && ((Attack == "None")||(Attack == "Locked"))){
-	switch(input.key.keysym.sym){
-	case SDLK_a :  //move left
-	  //state_choice = "RUNLEFT";
-	  std::cout << "left" << std::endl;
-	  if((Move_Rect->get_x_pos() - TILE_WIDTH) >= camera.x && MP > 0){ 
-	    Move_Rect->set_x_pos(Move_Rect->get_x_pos() - TILE_WIDTH);
-	  }
-	  //player->set_state(state_choice);
-	  break;
-	case SDLK_d :  //move right
-	  //state_choice = "RUNRIGHT";
-	  std::cout << "right" << std::endl;
-	  if((Move_Rect->get_x_pos() + (TILE_WIDTH*2)) <= (camera.x + camera.w) && MP > 0){ 
-	    Move_Rect->set_x_pos(Move_Rect->get_x_pos() + TILE_WIDTH);
-	  }
-	  //player->set_state(state_choice);
-	  break;
-	case SDLK_w :    //move up
-	  //state_choice = "RUNUP";
-	  std::cout << "up" << std::endl;
-	  if((Move_Rect->get_y_pos() - TILE_HEIGHT) >= camera.y  && MP > 0){ 
-	    Move_Rect->set_y_pos(Move_Rect->get_y_pos() - TILE_HEIGHT);
-	  }
-	  //player->set_state(state_choice);
-	  break;
-	case SDLK_s :   //move down
-	  //state_choice = "RUNDOWN";
-	  std::cout << "down" << std::endl;
-	  if((Move_Rect->get_y_pos() + (TILE_HEIGHT*2)) <= (camera.y + camera.h) && MP > 0){ 
-	    Move_Rect->set_y_pos(Move_Rect->get_y_pos() + TILE_HEIGHT);
-	  }
-	  //player->set_state(state_choice);
-	  break;
-	case SDLK_j :
-	  std::cout << "attack red" << std::endl;
-	  //reset attack rect
-	  Red_Attack_Rect->set_x_pos(player->get_x_pos());
-	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
-	  Red_Attack_Rect->set_width(TILE_WIDTH);
-	  Red_Attack_Rect->set_height(TILE_HEIGHT);
-	  //reset move rect
-	  Move_Rect->set_x_pos(player->get_x_pos());
-	  Move_Rect->set_y_pos(player->get_y_pos());
-	  Move_Rect->set_width(TILE_WIDTH);
-	  Move_Rect->set_height(TILE_HEIGHT);
-	  if(AP != 0){
-	    Attack = "Red";
-	    Rocket_Red->set_alive(true);
-	    Rocket_Red->set_x_pos(player->get_x_pos());
-	    Rocket_Red->set_y_pos(player->get_y_pos());
-	  }
-	  break;
-	case SDLK_k :
-	  //Attack = "Blue";
-	  break;
-	case SDLK_SPACE :
-	  std::cout << "turn over" << std::endl;
-	  //will later call Turn == "Attack";
-	  Turn = "Move";
-	  MP -= 1;
-	  break;
-	case SDLK_RETURN :
-	  Turn = "Enemy";
-	  break;
+  {
+    if(Turn == "Attack"){
+	    if(!Rocket_Red->is_alive()){
+	      Turn = "Player";
+	      player->set_state("Idle");
+	    }
+    }
 
-	} 
-      }
-      if(input.type == SDL_KEYDOWN){
-	switch(input.key.keysym.sym){
-	case SDLK_ESCAPE :
-	  game_paused = true;
-	  break;
-	}
+    if(Turn == "Move"){
+	    if((player->get_x_pos() == Move_Rect->get_x_pos()) && (player->get_y_pos() == Move_Rect->get_y_pos()))
+	    Turn = "Player";
+    }
+
+    if(input.type == SDL_KEYDOWN && (Attack == "Red")){
+
+	    std::cout << "enter" << std::endl;
+
+	    switch(input.key.keysym.sym){
+      	case SDLK_a :
+      	  //set rocket to fire left
+      	  //set attack rectangle to left
+      	  Red_Attack_Rect->set_x_pos(camera.x);
+      	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
+      	  Red_Attack_Rect->set_width(player->get_x_pos() - camera.x);
+      	  Red_Attack_Rect->set_height(TILE_HEIGHT);
+      	  Rocket_Red->set_direction("Left");
+      	  break;
+      	case SDLK_d :
+      	  //set rocket to fire right
+      	  //set attack rectangle to right
+      	  Red_Attack_Rect->set_x_pos(player->get_x_pos() + TILE_WIDTH);
+      	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
+      	  Red_Attack_Rect->set_width((camera.x + camera.w) - (player->get_x_pos() + TILE_WIDTH));
+      	  Red_Attack_Rect->set_height(TILE_HEIGHT);
+      	   Rocket_Red->set_direction("Right");
+      	  break;
+      	case SDLK_w :
+      	  //set rocket to fire up
+      	  //set attack rectangle to up
+      	  Red_Attack_Rect->set_x_pos(player->get_x_pos());
+      	  Red_Attack_Rect->set_y_pos(camera.y);
+      	  Red_Attack_Rect->set_width(TILE_WIDTH);
+      	  Red_Attack_Rect->set_height(player->get_y_pos() - camera.y);
+      	   Rocket_Red->set_direction("Up");
+      	  break;
+      	case SDLK_s :
+      	  //set rocket to fire down
+      	  //set attack rectangle to down
+      	  Red_Attack_Rect->set_x_pos(player->get_x_pos());
+      	  Red_Attack_Rect->set_y_pos(player->get_y_pos() + TILE_HEIGHT);
+      	  Red_Attack_Rect->set_width(TILE_WIDTH);
+      	  Red_Attack_Rect->set_height((camera.y + camera.h) - (player->get_y_pos() + TILE_HEIGHT));
+      	   Rocket_Red->set_direction("Down");
+      	  break;
+      	case SDLK_j :
+      	  Attack = "None";
+      	  //set rectangle to none setting
+      	  Red_Attack_Rect->set_x_pos(player->get_x_pos());
+      	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
+      	  Red_Attack_Rect->set_width(TILE_WIDTH);
+      	  Red_Attack_Rect->set_height(TILE_HEIGHT);
+      	  Rocket_Red->set_alive(false);
+      	  break;
+      	case SDLK_SPACE :
+          player->set_state("Firing");
+      	  Attack = "Locked";
+      	  Turn = "Attack";
+      	  AP -= 1;
+      	  player->set_direction(Rocket_Red->get_direction());
+      	  break;
+	    }
+
+    }
+    else if(input.type == SDL_KEYDOWN && (Turn == "Player") && ((Attack == "None")||(Attack == "Locked"))){
+    	switch(input.key.keysym.sym){
+    	case SDLK_a :  //move left
+    	  std::cout << "left" << std::endl;
+    	  if((Move_Rect->get_x_pos() - TILE_WIDTH) >= camera.x && MP > 0){
+    	    Move_Rect->set_x_pos(Move_Rect->get_x_pos() - TILE_WIDTH);
+    	  }
+    	  break;
+    	case SDLK_d :  //move right
+    	  std::cout << "right" << std::endl;
+    	  if((Move_Rect->get_x_pos() + (TILE_WIDTH*2)) <= (camera.x + camera.w) && MP > 0){
+    	    Move_Rect->set_x_pos(Move_Rect->get_x_pos() + TILE_WIDTH);
+    	  }
+    	  break;
+    	case SDLK_w :    //move up
+    	  std::cout << "up" << std::endl;
+    	  if((Move_Rect->get_y_pos() - TILE_HEIGHT) >= camera.y  && MP > 0){
+    	    Move_Rect->set_y_pos(Move_Rect->get_y_pos() - TILE_HEIGHT);
+    	  }
+    	  break;
+    	case SDLK_s :   //move down
+    	  std::cout << "down" << std::endl;
+    	  if((Move_Rect->get_y_pos() + (TILE_HEIGHT*2)) <= (camera.y + camera.h) && MP > 0){
+    	    Move_Rect->set_y_pos(Move_Rect->get_y_pos() + TILE_HEIGHT);
+    	  }
+	      break;
+    	case SDLK_j :
+    	  std::cout << "attack red" << std::endl;
+    	  //reset attack rect
+    	  Red_Attack_Rect->set_x_pos(player->get_x_pos());
+    	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
+    	  Red_Attack_Rect->set_width(TILE_WIDTH);
+    	  Red_Attack_Rect->set_height(TILE_HEIGHT);
+    	  //reset move rect
+    	  Move_Rect->set_x_pos(player->get_x_pos());
+    	  Move_Rect->set_y_pos(player->get_y_pos());
+    	  Move_Rect->set_width(TILE_WIDTH);
+    	  Move_Rect->set_height(TILE_HEIGHT);
+    	  if(AP != 0){
+    	    Attack = "Red";
+    	    Rocket_Red->set_alive(true);
+    	    Rocket_Red->set_x_pos(player->get_x_pos());
+    	    Rocket_Red->set_y_pos(player->get_y_pos());
+    	  }
+    	  break;
+    	case SDLK_k :
+    	  //Attack = "Blue";
+    	  break;
+    	case SDLK_SPACE :
+    	  std::cout << "turn over" << std::endl;
+    	  //will later call Turn == "Attack";
+    	  Turn = "Move";
+    	  MP -= 1;
+    	  break;
+    	case SDLK_RETURN :
+    	  Turn = "Enemy";
+    	  break;
+
+    	}
+    }
+
+    if(input.type == SDL_KEYDOWN){
+      if(input.key.keysym.sym == SDLK_ESCAPE){
+        game_paused = true;
       }
     }
+
+  }
 }
 
 void GameEngine::UpdateMechanics(){
@@ -272,7 +264,7 @@ void GameEngine::UpdateMechanics(){
 	if(Rocket_Red->Collision(&temp)){
 	  Rocket_Red->set_alive(false);
 	  rocky->kill();
-	  PE->PE_Init("./images/FireWork_Pix.png", game_renderer, temp.x, temp.y, 7, 7, FIREWORK);  
+	  PE->PE_Init("./images/FireWork_Pix.png", game_renderer, temp.x, temp.y, 7, 7, FIREWORK);
 	}
 	player->Obj_Update(player->get_x_pos(), player->get_y_pos());
       }
@@ -382,29 +374,39 @@ void GameEngine::Render(){
     Title_Screen->Obj_Render(0,0);
   }
   else
-    {
-      BG->Obj_Render(camera.x, camera.y); //render background
-      for(int i = 0; i < TOTAL_TILES; i++){ //render tiles
-	Tiles[i]->Obj_Render(camera);
-      }
-      PE->draw(game_renderer); //render the particles
-      player->Obj_Render(camera.x, camera.y); //render player
-      rocky->render(camera.x, camera.y); //render enemy
-      if((player->get_x_pos() != Move_Rect->get_x_pos()) || (player->get_y_pos() != Move_Rect->get_y_pos())){
-	Move_Rect->Obj_Render(camera.x, camera.y); //render move selection
-      }
-      if(((player->get_x_pos() != Red_Attack_Rect->get_x_pos()) || (player->get_y_pos() != Red_Attack_Rect->get_y_pos())) && ((Attack == "Red")||(Attack == "Blue"))){
-	Red_Attack_Rect->Obj_Render(camera.x, camera.y);
-      }
-      if(Rocket_Red->is_alive() && ((Rocket_Red->get_x_pos() != player->get_x_pos()) || (Rocket_Red->get_y_pos() != player->get_y_pos()))){
-	Rocket_Red->Obj_Render(camera.x, camera.y);
-      }
-      // If game is paused, render the pause screen over gameplay.
-      if( game_paused == true)
-	{
-	  Pause_Screen->Obj_Render(0,0);
-	}
+  {
+    BG->Obj_Render(camera.x, camera.y); //render background
+
+    for(int i = 0; i < TOTAL_TILES; i++){ //render tiles
+	    Tiles[i]->Obj_Render(camera);
     }
+
+    PE->draw(game_renderer); //render the particles
+
+    player->Obj_Render(camera.x, camera.y); //render player
+
+    rocky->render(camera.x, camera.y); //render enemy
+
+    if((player->get_x_pos() != Move_Rect->get_x_pos()) || (player->get_y_pos() != Move_Rect->get_y_pos())){
+	    Move_Rect->Obj_Render(camera.x, camera.y); //render move selection
+    }
+
+    if(((player->get_x_pos() != Red_Attack_Rect->get_x_pos()) || (player->get_y_pos() != Red_Attack_Rect->get_y_pos())) && ((Attack == "Red")||(Attack == "Blue"))){
+	    Red_Attack_Rect->Obj_Render(camera.x, camera.y);
+    }
+
+    if(Rocket_Red->is_alive() && ((Rocket_Red->get_x_pos() != player->get_x_pos()) || (Rocket_Red->get_y_pos() != player->get_y_pos()))){
+	    Rocket_Red->Obj_Render(camera.x, camera.y);
+    }
+
+    // If game is paused, render the pause screen over gameplay.
+    if( game_paused == true)
+	  {
+	    Pause_Screen->Obj_Render(0,0);
+	  }
+
+  }
+
   SDL_RenderPresent(game_renderer); //present game
 }
 
