@@ -4,17 +4,15 @@
 #include "game.h"
 #include "GameObject.h"
 
-struct coordinate{
-  int x;
-  int y;
-};
+#define TILE_W 64
+#define TILE_H 64
 
 class Rocky : public GameObject {
 
  public:
    Rocky(SDL_Renderer* ren);
    ~Rocky();
-   bool move(struct coordinate dest);
+   bool move(coordinate_t dest);
    void attack();
    void Obj_Update();
    void Obj_Render(int x, int y);

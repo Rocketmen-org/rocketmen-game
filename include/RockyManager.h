@@ -1,15 +1,16 @@
 #ifndef RockyManager_h
 #define RockyManager_h
 
-#include <vector>
-
 #include "game.h"
 #include "Sprite.h"
 #include "Rocky.h"
+#include "Map.h"
 
 #define NUM_ROCKYS 1
 #define ROCKY_START_X 4 * 64
 #define ROCKY_START_Y 4 * 64
+#define TILE_W 64
+#define TILE_H 64
 
 class RockyManager{
 	
@@ -33,9 +34,11 @@ public:
 private:
   
   SDL_Renderer* obj_renderer;
+  Map* map;
 
   vector<Rocky*> rockys;
-  vector<struct coordinate> dest;
+  vector<coordinate_t> dest;
+  vector<vector<coordinate_t>> paths;
 
   bool attack;
   bool turn_over;
