@@ -49,6 +49,11 @@ void GameEngine::Init(){
 
   Mode_Indicator = new TextObject(game_renderer);
   Mode_Indicator->obj_init("./images/textfile.ttf", 15, 420, Mode_Color, 30);
+
+  
+  Lives_Indicator = new TextObject(game_renderer);
+  Lives_Indicator->obj_init("./images/textfile.ttf", 622, 5, Mode_Color, 30);
+  
   PE = new Particle_Emitter();
   
   Turn = "Player";
@@ -69,6 +74,9 @@ void GameEngine::HandleEvents(){
 
   if(enemy_amount <= 0){ //win condition
     game_win = true;
+  }
+  if(player_lives <= 0){
+    game_lose = true;
   }
   // If game is in the title screen, don't update other events!
   if( game_titlescreen == true )
@@ -411,7 +419,11 @@ void GameEngine::Render(){
       if(Rocket_Red->is_alive() && ((Rocket_Red->get_x_pos() != player->get_x_pos()) || (Rocket_Red->get_y_pos() != player->get_y_pos()))){
 	Rocket_Red->Obj_Render(camera.x, camera.y); //render the attack if it is happening
       }
+      char temp = '0' + player_lives;
+      Lives_Indicator->obj_update(&temp);
+      Lives_Indicator->obj_render();
       Mode_Indicator->obj_render();
+
       // If game is paused, render the pause screen over gameplay.
       if( game_paused == true)
 	{
