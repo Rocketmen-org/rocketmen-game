@@ -32,6 +32,7 @@ public:
   SDL_Rect getRect();
   void kill();
   void reset();
+  bool adjacent(int x, int y);
 
 private:
   
