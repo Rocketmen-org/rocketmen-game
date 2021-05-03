@@ -11,6 +11,7 @@
 #define ROCKY_START_Y 4 * 64
 #define TILE_W 64
 #define TILE_H 64
+#define MOVEMENT 2
 
 class RockyManager{
 	
@@ -44,6 +45,8 @@ private:
   bool attack;
   bool turn_over;
   bool alive;
+
+  int remaining_movement;
 };
 
 

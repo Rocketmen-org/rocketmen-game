@@ -26,6 +26,7 @@ void RockyManager::init(const char* image){
   attack = false;
   turn_over = false;
   alive = true;
+  remaining_movement = 0;
 }
 
 void RockyManager::update(){
@@ -36,9 +37,10 @@ void RockyManager::update(){
       if(!rockys[i]->isDone()){
 	turn_over = false; //runs if a single rocky isn't done
         if(rockys[i]->move(dest[i])){ //if finished moving
-	  if (paths[i].size() > 0){
+	  if (paths[i].size() > 0 && remaining_movement > 0){
             dest[i] = paths[i].back();
 	    paths[i].pop_back();
+	    remaining_movement--;
 	  }
 	  else{
             rockys[i]->attack(); //attack
@@ -72,6 +74,7 @@ bool RockyManager::defend(){return !attack;}
 void RockyManager::setAttack(int x, int y){
   attack = true;
   turn_over = false;
+  remaining_movement = MOVEMENT;
   for(int i = 0; i < NUM_ROCKYS; i++){
     rockys[i]->setDone(false);
     dest[i].first = x;
@@ -79,11 +82,43 @@ void RockyManager::setAttack(int x, int y){
 
     coordinate_t cur_pos = make_pair(rockys[i]->get_rect().x/TILE_W, rockys[i]->get_rect().y/TILE_H);
     coordinate_t temp_dest = make_pair(dest[i].first/TILE_W, dest[i].second/TILE_H);
+
+    //determine which adjacent side to target
+    
+    //upward
+    coordinate_t dest_upward = make_pair(temp_dest.first, temp_dest.second - 1);
+    int upward = abs(cur_pos.first - dest_upward.first) + abs(cur_pos.second - dest_upward.second);
+
+    //downward
+    coordinate_t dest_downward = make_pair(temp_dest.first, temp_dest.second + 1);
+    int downward = abs(cur_pos.first - dest_downward.first) + abs(cur_pos.second - dest_downward.second);
+
+    //rightward
+    coordinate_t dest_rightward = make_pair(temp_dest.first + 1, temp_dest.second);
+    int rightward = abs(cur_pos.first - dest_rightward.first) + abs(cur_pos.second - dest_rightward.second);
+
+    //leftward
+    coordinate_t dest_leftward = make_pair(temp_dest.first - 1, temp_dest.second);
+    int leftward = abs(cur_pos.first - dest_leftward.first) + abs(cur_pos.second - dest_leftward.second);
+
+    int min = upward;
+    if (downward < min)
+      min = downward;
+    if (rightward < min)
+      min = rightward;
+    if (leftward < min)
+      min = leftward;
+
+    if (min == upward)
+      temp_dest = dest_upward;
+    if (min == downward)
+      temp_dest = dest_downward;
+    if (min == rightward)
+      temp_dest = dest_rightward;
+    if (min == leftward)
+      temp_dest = dest_leftward;
+
     printf("finding path from %d, %d to %d, %d\n", cur_pos.first, cur_pos.second, temp_dest.first, temp_dest.second);
-    map->block(make_pair(4, 5), true);
-    map->block(make_pair(5, 6), true);
-    map->block(make_pair(6, 5), true);
-    map->block(make_pair(7, 6), true);
     paths[i] = map->getPath(cur_pos, temp_dest);
 
     //paths[i] = map->getPath(make_pair(1,1), make_pair(10,1));
