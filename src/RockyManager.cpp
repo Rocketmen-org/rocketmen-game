@@ -149,3 +149,17 @@ void RockyManager::reset(){
     rockys[i]->set_y_pos(ROCKY_START_Y);
   }
 }
+
+bool RockyManager::adjacent(int x, int y){
+  x /= TILE_W;
+  y /= TILE_H;
+  for(int i = 0; i < NUM_ROCKYS; i++){
+    int rx = rockys[i]->get_x_pos() / TILE_W;
+    int ry = rockys[i]->get_y_pos() / TILE_H;
+
+    if (x >= rx - 1 && x <= rx + 1)
+      return true;
+     if (y >= ry - 1 && y <= ry + 1)
+      return true;
+  }
+}
