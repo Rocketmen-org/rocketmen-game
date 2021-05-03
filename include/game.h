@@ -17,4 +17,5 @@ using namespace std;
 
 typedef pair<int, int> coordinate_t;
 
+
 #endif

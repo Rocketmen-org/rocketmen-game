@@ -6,7 +6,6 @@ class TextObject : public GameObject
 public:
   TextObject(SDL_Renderer* ren);
   ~TextObject();
-
   // Have to implement this in here for LITERALLY No reason
   void obj_init( const char* ttf_file, int start_x, int start_y, SDL_Color start_color, int size)
   {
@@ -24,6 +23,7 @@ public:
 
   void obj_update( const char* A );
   void obj_render();
+  void text_color(SDL_Color newcolor);
 
 private:
 

@@ -34,3 +34,7 @@ void TextObject::obj_render()
 {
   SDL_RenderCopy(obj_renderer, obj_texture, NULL, &obj_rect);
 }
+
+void TextObject::text_color(SDL_Color newcolor){
+  obj_color = newcolor;
+}

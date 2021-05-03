@@ -8,7 +8,7 @@ int main(){
   int FPS = 1000 / 60;
   
   GameEngine* GE = new GameEngine;
-
+  TTF_Init();
   GE->Init();
 
   while(GE->Game_Is_Running()){

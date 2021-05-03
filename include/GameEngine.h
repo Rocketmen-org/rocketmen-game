@@ -71,7 +71,9 @@ protected:
   GameObject* BG;
 
   Particle_Emitter* PE;
-
+  TextObject* Mode_Indicator;
+  SDL_Color Mode_Color = {255, 255, 255};
+  
   Tile* Tiles[TOTAL_TILES];
 
 

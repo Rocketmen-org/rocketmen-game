@@ -31,18 +31,24 @@ void GameEngine::Init(){
 
   Title_Screen = new GameObject(game_renderer); // creating title screen image
   Title_Screen->Obj_Init("./images/screen_title.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+
   Pause_Screen = new GameObject(game_renderer); //creating pause screen image
   Pause_Screen->Obj_Init("./images/screen_paused.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+
   Win_Screen = new GameObject(game_renderer);
   Win_Screen->Obj_Init("./images/screen_win.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+
   Lose_Screen = new GameObject(game_renderer);
   Lose_Screen->Obj_Init("./images/screen_lose.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
+
   BG = new GameObject(game_renderer); //creating pause screen image
   BG->Obj_Init("./images/background.png", 1, 1, 0, 0, 5000, 5000, LEVEL_WIDTH, LEVEL_HEIGHT, 255);
   
   Rocket_Red = new Red_Rocket(game_renderer);
   Rocket_Red->Obj_Init("./images/rocket_red.png", 1, 1, player->get_x_pos(), player->get_y_pos(), 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 255);
 
+  Mode_Indicator = new TextObject(game_renderer);
+  Mode_Indicator->obj_init("./images/textfile.ttf", 15, 420, Mode_Color, 30);
   PE = new Particle_Emitter();
   
   Turn = "Player";
@@ -109,6 +115,7 @@ void GameEngine::HandleEvents(){
 	  case SDLK_ESCAPE :
 	    game_titlescreen = true;
 	    game_paused = false;
+	    game_win = false;
 	    Game_Reset();
 	    break; 
 	  case SDLK_RETURN :
@@ -378,6 +385,16 @@ void GameEngine::Render(){
   }
   else
     {
+      //TTF Section
+      if(Turn == "Player" || Turn == "Move"){
+	Mode_Indicator->obj_update("Move Mode");
+      }
+      if(Turn == "Attack"|| Attack == "Red"){
+	Mode_Indicator->obj_update("Attack Mode");
+      }
+      if(Turn == "Enemy"){
+	Mode_Indicator->obj_update("Enemy Turn");
+      }
       BG->Obj_Render(camera.x, camera.y); //render background
       for(int i = 0; i < TOTAL_TILES; i++){ //render tiles
 	Tiles[i]->Obj_Render(camera);
@@ -394,6 +411,7 @@ void GameEngine::Render(){
       if(Rocket_Red->is_alive() && ((Rocket_Red->get_x_pos() != player->get_x_pos()) || (Rocket_Red->get_y_pos() != player->get_y_pos()))){
 	Rocket_Red->Obj_Render(camera.x, camera.y); //render the attack if it is happening
       }
+      Mode_Indicator->obj_render();
       // If game is paused, render the pause screen over gameplay.
       if( game_paused == true)
 	{
