@@ -8,6 +8,7 @@
 #include "Tiles.h"
 #include "Background.h"
 #include "Particle_Emitter.h"
+#include "textObject.h"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
