@@ -8,7 +8,7 @@ CXX = g++
 #   if it finds a warning...
 CXXFLAGS = `sdl2-config --cflags` -std=c++17 -ggdb3 -Wall  #Add more flags as you see fit!
 # CXXFLAGS = -`sdl2-config --cflags` std=c++17 -ggdb3 -Wall -W -Werror -Weffc++ -Wextra -pedantic
-LDFLAGS = `sdl2-config --libs` -lm -lSDL2_image
+LDFLAGS = `sdl2-config --libs` -lm -lSDL2_image -lSDL2_ttf
 
 # For the include statements, the compiler needs to know where the .h files are
 # located at! For many files, it knows by default, but for SDL, since this is not
