@@ -37,9 +37,6 @@ SDL_Rect Sprite::sprite_update(){
   return(sprite_rect);
 }
 
-void Sprite::sprite_render(SDL_Renderer* ren){
-}
-
 void Sprite::sprite_quit(){
   //delete
 }

@@ -9,7 +9,6 @@ class Sprite {
   ~Sprite();
   void Sprite_init(const char* image, SDL_Renderer* ren, int f, int d, int w, int h, int s);
   SDL_Rect sprite_update();
-  void sprite_render(SDL_Renderer* ren);
   void sprite_quit();
   void set_duration(int d);
   void set_state(int s);

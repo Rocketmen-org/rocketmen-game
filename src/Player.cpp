@@ -69,21 +69,8 @@ string Player::get_state(){
   return State;  //returns state
 }
 
-void Player::set_prev_state(string A){
-  Prev_State = A; //store previous state before jumping so that we can return to it
-}
-
-bool Player::get_is_jumping(){
-  return true;
-}
-
-string Player::get_prev_state(){
-  return Prev_State;
-}
-
 void Player::set_sprite(string A){
   if(A == "Right"){
-    std::cout << "enter shoot" << std::endl;
     Obj_sprite->set_state(5);
     Obj_sprite->set_frames(6);
     Obj_sprite->set_duration(200);
@@ -103,11 +90,6 @@ void Player::set_sprite(string A){
     Obj_sprite->set_frames(6);
     Obj_sprite->set_duration(200);
   }
-  /*else if(A == "Idle"){
-    Obj_sprite->set_state(0);
-    Obj_sprite->set_frames(6);
-    Obj_sprite->set_duration(200);
-    }*/
 }
 
 

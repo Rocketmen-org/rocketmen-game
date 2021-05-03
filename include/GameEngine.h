@@ -49,9 +49,6 @@ public:
 
   void Game_Reset();
 
-  bool Collision_Det(SDL_Rect a, SDL_Rect b);
-  void Collision_Res(Player* a, GameObject* b);
-
   void Render();
 
   void Quit();
@@ -61,7 +58,6 @@ protected:
   Player* player;
   RockyManager* rocky;
 
-  //Blue_Rocket* rocket_blue
   Red_Rocket* Rocket_Red;
 
   GameObject* Move_Rect;
