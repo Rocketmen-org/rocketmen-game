@@ -9,7 +9,7 @@ void Particle_Emitter::PE_Init(const char* graphic, SDL_Renderer* ren, int X, in
   
   int max_parts = MAX_PARTS;
   if(part_type == FIREWORK){ 
-    max_parts = MAX_PARTS_FIRE; //set amoutn of particles to the amount for the type
+    max_parts = MAX_PARTS_FIRE; //set amount of particles to the amount for the type
    
     for(int i = 0; i < max_parts; i++){ //loop through and create each particle
       particles[i] = new Particle();

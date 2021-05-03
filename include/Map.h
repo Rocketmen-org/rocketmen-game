@@ -4,6 +4,7 @@
 #define Map_h
 
 #include "game.h"
+#include <climits>
 
 #define LEVEL_W 12
 #define LEVEL_H 12

@@ -30,6 +30,7 @@ public:
 
   SDL_Rect getRect();
   void kill();
+  void reset();
 
 private:
   
