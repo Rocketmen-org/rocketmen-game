@@ -36,8 +36,8 @@ void Particle_Emitter::Update(){
 }
 
 void Particle_Emitter::draw(SDL_Renderer* ren){
-   int max_parts = MAX_PARTS;
-
+  int max_parts = MAX_PARTS;
+  
   if(part_type == FIREWORK){
     max_parts = MAX_PARTS_FIRE;
     for(int i = 0; i < max_parts; i++){

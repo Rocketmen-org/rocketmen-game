@@ -29,7 +29,7 @@ void GameEngine::Init(){
   Red_Attack_Rect = new GameObject(game_renderer);
   Red_Attack_Rect->Obj_Init("./images/Red_Rect.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
   
-  player->set_state("IDLE");
+  //player->set_state("IDLE");
 
   Title_Screen = new GameObject(game_renderer); // creating title screen image
   Title_Screen->Obj_Init("./images/screen_title.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
@@ -173,7 +173,7 @@ void GameEngine::HandleEvents(){
 	  Red_Attack_Rect->set_y_pos(player->get_y_pos());
 	  Red_Attack_Rect->set_width((camera.x + camera.w) - (player->get_x_pos() + TILE_WIDTH));
 	  Red_Attack_Rect->set_height(TILE_HEIGHT);
-	   Rocket_Red->set_direction("Right");
+	  Rocket_Red->set_direction("Right");
 	  break;
 	case SDLK_w : 
 	  //set rocket to fire up
@@ -224,15 +224,12 @@ void GameEngine::HandleEvents(){
 	  }
 	  break;
 	case SDLK_w :    //move  selection up
-	  std::cout << "up" << std::endl;
 	  if((Move_Rect->get_y_pos() - TILE_HEIGHT) >= camera.y  && MP > 0){ 
 	    Move_Rect->set_y_pos(Move_Rect->get_y_pos() - TILE_HEIGHT);
 	  }
 	  //player->set_state(state_choice);
 	  break;
-	case SDLK_s :   //move down
-	  //state_choice = "RUNDOWN";
-	  std::cout << "down" << std::endl;
+	case SDLK_s :   //move selection down
 	  if((Move_Rect->get_y_pos() + (TILE_HEIGHT*2)) <= (camera.y + camera.h) && MP > 0){ 
 	    Move_Rect->set_y_pos(Move_Rect->get_y_pos() + TILE_HEIGHT);
 	  }
@@ -256,7 +253,6 @@ void GameEngine::HandleEvents(){
 	  }
 	  break;
 	case SDLK_SPACE :
-	  std::cout << "turn over" << std::endl;
 	  //will later call Turn == "Attack";
 	  Turn = "Move";
 	  MP -= 1;
@@ -281,7 +277,6 @@ void GameEngine::UpdateMechanics(){
   // Check if the game is paused or in the title screen before doing anything
   if( game_titlescreen == false && game_paused == false ){
     if(Turn == "Enemy"){ //if its the enemys turn
-      std::cout << "enemy turn" << std::endl;
       if (rocky->defend()){
 	rocky->setAttack((rand() % 4 + 4) * 64, (rand() % 4 + 4) * 64); //start enemy attack
       }
@@ -367,37 +362,6 @@ void GameEngine::SetTiles(){
   }
 }
 
-
-bool GameEngine::Collision_Det(SDL_Rect a, SDL_Rect b){
-  //create one box
-  int Left_A = a.x + 40;
-  int Right_A = Left_A + a.w - 40;
-  int Top_A = a.y;
-  int Bottom_A = Top_A + a.h;
-  //create another box
-  int Left_B = b.x;
-  int Right_B = Left_B + b.w;
-  int Top_B = b.y;
-  int Bottom_B = Top_B + b.h;
-
-  //this checks if y locations arent overlapping
-  if(Bottom_A <= Top_B){
-    return false;
-  }
-  if(Top_A >= Bottom_B){
-    return false;
-  }
-  //these check check if x locations arent overlapping
-  if(Right_A <= Left_B){
-    return false;
-  }
-  if(Left_A >= Right_B){
-    return false;
-  }
-  //if none of the not overlapping conditions is met then it is overlapping
-  return true;
-}
-
 void GameEngine::Render(){
   //set background color
   SDL_SetRenderDrawColor(game_renderer, 135, 206, 235, 255);
@@ -458,8 +422,12 @@ void GameEngine::Game_Reset(){ //reseting game to inital setup
   MP = 1;
   player->set_x_pos(PLAYER_START_X);
   player->set_y_pos(PLAYER_START_Y);
-  //unkill all the enemys
   //need to reset rocky position
   rocky->reset();
+  //reset move rect
+  Move_Rect->set_x_pos(player->get_x_pos());
+  Move_Rect->set_y_pos(player->get_y_pos());
+  Move_Rect->set_width(TILE_WIDTH);
+  Move_Rect->set_height(TILE_HEIGHT);
   SetCamera();
 }
