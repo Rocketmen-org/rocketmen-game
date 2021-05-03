@@ -106,3 +106,11 @@ SDL_Rect RockyManager::getRect(){
 void RockyManager::kill(){
   alive = false;
 }
+
+void RockyManager::reset(){
+  alive = true;
+  for(int i = 0; i < NUM_ROCKYS; i++){
+    rockys[i]->set_x_pos(ROCKY_START_X);
+    rockys[i]->set_y_pos(ROCKY_START_Y);
+  }
+}

@@ -15,6 +15,7 @@ const int LEVEL_WIDTH = 768;
 const int LEVEL_HEIGHT = 768;
 const int PLAYER_START_X = 64;
 const int PLAYER_START_Y = 128;
+const int ENEMY_AMOUNT = 1;
 
 const int Background_Size = 2;
 
@@ -46,6 +47,8 @@ public:
   void SetCamera();
   void SetTiles();
 
+  void Game_Reset();
+
   bool Collision_Det(SDL_Rect a, SDL_Rect b);
   void Collision_Res(Player* a, GameObject* b);
 
@@ -66,6 +69,8 @@ protected:
   GameObject* Red_Attack_Rect;
   GameObject* Title_Screen;
   GameObject* Pause_Screen;
+  GameObject* Win_Screen;
+  GameObject* Lose_Screen;
   GameObject* BG;
 
   Particle_Emitter* PE;
@@ -79,7 +84,10 @@ protected:
 
   bool game_titlescreen = true;
   bool game_paused = false;
+  bool game_win = false;
+  bool game_lose = false;
   bool is_running = true;
+  int enemy_amount = ENEMY_AMOUNT;
   string Turn;
   string Attack;
   int AP = 1;
