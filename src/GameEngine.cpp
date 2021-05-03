@@ -28,8 +28,6 @@ void GameEngine::Init(){
 
   Red_Attack_Rect = new GameObject(game_renderer);
   Red_Attack_Rect->Obj_Init("./images/Red_Rect.xcf", 1, 60, PLAYER_START_X, PLAYER_START_Y, 3000, 3000, TILE_WIDTH, TILE_HEIGHT, 100);
-  
-  //player->set_state("IDLE");
 
   Title_Screen = new GameObject(game_renderer); // creating title screen image
   Title_Screen->Obj_Init("./images/screen_title.png", 1, 1, 0, 0, 1920, 1800, SCREEN_WIDTH, SCREEN_HEIGHT, 255);
@@ -148,7 +146,6 @@ void GameEngine::HandleEvents(){
       if(Turn == "Attack"){ //determine in attack turn is over
 	if(!Rocket_Red->is_alive()){
 	  Turn = "Player";
-	  player->set_state("Idle");
 	}
       } 
       if(Turn == "Move"){  //determine if move turn is over
