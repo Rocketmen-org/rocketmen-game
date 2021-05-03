@@ -23,6 +23,7 @@ public:
   }
 
   void obj_update( const char* A );
+  void text_color( SDL_Color );
   void obj_render();
 
 private:
