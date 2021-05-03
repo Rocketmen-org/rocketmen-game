@@ -282,7 +282,7 @@ void GameEngine::UpdateMechanics(){
   if( game_titlescreen == false && game_paused == false ){
     if(Turn == "Enemy"){ //if its the enemys turn
       if (rocky->defend()){
-	rocky->setAttack((rand() % 4 + 4) * 64, (rand() % 4 + 4) * 64); //start enemy attack
+	rocky->setAttack(player->get_x_pos(), player->get_y_pos()); //start enemy attack
       }
       player->Obj_Update(player->get_x_pos(), player->get_y_pos());
       if(rocky->turnOver()){
