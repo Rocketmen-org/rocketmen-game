@@ -72,6 +72,7 @@ protected:
 
   Particle_Emitter* PE;
   TextObject* Mode_Indicator;
+  TextObject* Lives_Indicator;
   SDL_Color Mode_Color = {255, 255, 255};
   
   Tile* Tiles[TOTAL_TILES];
@@ -87,6 +88,7 @@ protected:
   bool game_lose = false;
   bool is_running = true;
   int enemy_amount = ENEMY_AMOUNT;
+  int player_lives = 3;
   string Turn;
   string Attack;
   int AP = 1;
